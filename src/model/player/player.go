@@ -14,19 +14,19 @@ type IMusicPlayer interface {
 	Prev()
 }
 
-type SongListNode struct {
+type Playlist struct {
 	list.ISongList
 	song         song.Song
-	nextSong     *SongListNode
-	previousSong *SongListNode
+	nextSong     *Playlist
+	previousSong *Playlist
 }
 
-func (sl *SongListNode) Append(song song.Song) {
+func (sl *Playlist) Append(song song.Song) {
 	last := sl.nextSong
 	for sl.nextSong != nil {
 		last = last.nextSong
 	}
-	last.nextSong = &SongListNode{
+	last.nextSong = &Playlist{
 		song:         song,
 		nextSong:     nil,
 		previousSong: last,
@@ -35,7 +35,7 @@ func (sl *SongListNode) Append(song song.Song) {
 
 type MusicPlayer struct {
 	IMusicPlayer
-	playlist *SongListNode
+	playlist *Playlist
 	ticker   *time.Ticker
 	status   chan bool
 }
