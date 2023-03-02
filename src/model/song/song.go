@@ -3,6 +3,6 @@ package song
 import "time"
 
 type Song struct {
-	Name     string
+	Title    string
 	Duration time.Duration
 }
