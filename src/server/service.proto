@@ -1,0 +1,90 @@
+syntax = "proto3";
+//package music_player_service;
+
+option go_package = "github.com/mokan-r/pitch";
+
+message Music {
+  Song song = 1;
+  int64 Elapsed = 2;
+}
+
+message Song {
+  string id = 1;
+  string SongTitle = 2;
+  int64 Elapsed = 3;
+}
+
+service MusicPlayer {
+  rpc Play(PlayRequest) returns (stream PlayResponse);
+  rpc Pause(PauseRequest) returns (PauseResponse);
+  rpc Next(NextRequest) returns (NextResponse);
+  rpc Prev(PrevRequest) returns (PrevResponse);
+  rpc AddSong(AddSongRequest) returns (AddSongResponse);
+
+  rpc CreateSong(CreateSongRequest) returns (CreateSongResponse);
+  rpc GetSong(GetSongRequest) returns (GetSongResponse);
+  rpc UpdateSong(UpdateSongRequest) returns (UpdateSongResponse);
+  rpc DeleteSong(DeleteSongRequest) returns (DeleteSongResponse);
+
+  rpc GetSongs(GetSongsRequest) returns (GetSongsResponse);
+}
+
+message NextRequest {}
+message NextResponse {
+  bool ok = 1;
+}
+message PrevRequest {}
+message PrevResponse {
+  bool ok = 1;
+}
+message AddSongRequest {
+  string song_id = 1;
+}
+message AddSongResponse {
+  bool ok = 1;
+}
+
+message CreateSongRequest {
+  Song song = 1;
+}
+message CreateSongResponse {
+  bool ok = 1;
+}
+
+message GetSongRequest {
+  string song_id = 1;
+}
+message GetSongResponse {
+  Song song = 1;
+}
+
+message UpdateSongRequest {
+  string song_id = 1;
+  Song song = 2;
+}
+message UpdateSongResponse {
+  bool ok = 1;
+}
+
+message DeleteSongRequest {
+  string song_id = 1;
+}
+message DeleteSongResponse {
+  bool ok = 1;
+}
+
+message GetSongsRequest {}
+message GetSongsResponse {
+  repeated Song song = 1;
+}
+
+message PauseRequest {}
+message PauseResponse {
+  bool ok = 1;
+}
+
+message PlayRequest {}
+
+message PlayResponse {
+  Music music = 1;
+}

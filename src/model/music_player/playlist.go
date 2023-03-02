@@ -52,3 +52,7 @@ func (pl *Playlist) PrevSong() {
 func (pl *Playlist) Back() *song.Song {
 	return pl.tail.song
 }
+
+func (pl *Playlist) Current() *song.Song {
+	return pl.current.song
+}

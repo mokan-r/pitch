@@ -17,8 +17,8 @@ type IMusicPlayer interface {
 
 type MusicPlayer struct {
 	IMusicPlayer
-	playlist        *Playlist
-	elapsed         time.Duration
+	Playlist        *Playlist
+	Elapsed         time.Duration
 	songEnded       chan bool
 	songPaused      chan bool
 	addSongMutex    sync.Mutex
@@ -28,13 +28,13 @@ type MusicPlayer struct {
 }
 
 func (m *MusicPlayer) Play() error {
-	if m.playlist == nil {
+	if m.Playlist == nil {
 		return fmt.Errorf("playlist is empty")
 	}
 	if m.Paused {
 		m.Paused = false
 		go func() {
-			time.Sleep(m.playlist.current.song.Duration - m.elapsed)
+			time.Sleep(m.Playlist.current.song.Duration - m.Elapsed)
 			m.songEnded <- true
 		}()
 		go func() {
@@ -49,7 +49,7 @@ func (m *MusicPlayer) Play() error {
 					m.Next()
 					m.Play()
 				case t := <-ticker.C:
-					m.elapsed = time.Duration(t.Second())
+					m.Elapsed = time.Duration(t.Second())
 				}
 			}
 		}()
@@ -69,27 +69,27 @@ func (m *MusicPlayer) Pause() {
 
 func (m *MusicPlayer) AddSong(song *song.Song) {
 	m.changeSongMutex.Lock()
-	m.playlist.Append(song)
+	m.Playlist.Append(song)
 	m.changeSongMutex.Unlock()
 }
 
 func (m *MusicPlayer) Next() {
 	m.changeSongMutex.Lock()
 	m.Pause()
-	if m.playlist.NextSong() {
-		m.elapsed = 0
+	if m.Playlist.NextSong() {
+		m.Elapsed = 0
 	}
 	m.changeSongMutex.Unlock()
 }
 
 func (m *MusicPlayer) Prev() error {
 	m.changeSongMutex.Lock()
-	if m.playlist == nil {
-		return fmt.Errorf("playlist is empty")
+	if m.Playlist == nil {
+		return fmt.Errorf("Playlist is empty")
 	}
 	m.Pause()
-	m.playlist.PrevSong()
-	m.elapsed = 0
+	m.Playlist.PrevSong()
+	m.Elapsed = 0
 	m.changeSongMutex.Unlock()
 	return nil
 }
@@ -98,7 +98,7 @@ func New() MusicPlayer {
 	return MusicPlayer{
 		songEnded:  make(chan bool, 1),
 		songPaused: make(chan bool, 1),
-		playlist:   &Playlist{},
+		Playlist:   &Playlist{},
 		Paused:     true,
 	}
 }
