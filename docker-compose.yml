@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+#  pitch:
+#    build:
+#      context: "."
+#    ports:
+#      - "5454:5454"
+#  envoy:
+#    image: envoyproxy/envoy:v1.14.1
+#    ports:
+#      - '10000:10000'
+#      - '50051:50051'
+#      - '8080:8080'
+#      - '8001:8001'
+#    volumes:
+#      - "./envoy/envoy.yaml:/etc/envoy/envoy.yaml"

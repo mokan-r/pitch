@@ -44,27 +44,24 @@ func (r *Repository) Ping() error {
 
 func (r *Repository) Set(song entity.Song) error {
 	logrus.Info(song)
-	query := `INSERT INTO songs (uid, title)
-				VALUES ($1, $2)
+	query := `INSERT INTO songs (uid, title, duration)
+				VALUES ($1, $2, $3)
 				ON CONFLICT (uid) DO UPDATE
-				SET title = EXCLUDED.title;`
+				SET title = EXCLUDED.title, duration = EXCLUDED.duration;`
 	_, err := r.db.Exec(query, song.Id, song.Title, song.Duration)
 	return err
 }
 
-func (r *Repository) Get(song entity.Song) (out entity.Song, err error) {
-	query := `SELECT title FROM songs WHERE uid = $1;`
-	err = r.db.Get(&out, query, song.Id)
+func (r *Repository) Get(id int) (out entity.Song, err error) {
+	query := `SELECT * FROM songs WHERE uid = $1;`
+	err = r.db.Get(&out, query, id)
 	return out, err
 }
 
-func (r *Repository) Delete(song entity.Song) (out entity.Song, err error) {
-	if _, err := r.Get(song); err != nil {
-		return out, err
-	}
+func (r *Repository) Delete(id int) (err error) {
 	query := `DELETE FROM songs WHERE uid = $1;`
-	_, err = r.db.Exec(query, song.Id)
-	return out, err
+	_, err = r.db.Exec(query, id)
+	return err
 }
 
 func (r *Repository) GetAll() (out []entity.Song, err error) {

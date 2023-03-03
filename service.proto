@@ -11,7 +11,7 @@ message Music {
 message Song {
   string id = 1;
   string SongTitle = 2;
-  int64 Elapsed = 3;
+  int64 Duration = 3;
 }
 
 service MusicPlayer {
